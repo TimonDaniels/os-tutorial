@@ -12,18 +12,14 @@ KERNEL_OFFSET equ 0x1000 ; The same one we used when linking the kernel
     call load_kernel ; read the kernel from disk
     call switch_to_pm ; disable interrupts, load GDT,  etc. Finally jumps to 'BEGIN_PM'
 
-; =================================================
-; HOW DO WE GET FROM SWITCH_TO_PM TO BEGIN_PM?
-; And how does this gdt play into this?
-; =================================================
     jmp $ ; Never executed
 
-%include "../boot_sector/boot_sect_print.asm"
-%include "../boot_sector/boot_sect_print_hex.asm"
-%include "../boot_sector/boot_sect_disk.asm"
-%include "../boot_sector/32bit-gdt.asm"
-%include "../boot_sector/32bit-print.asm"
-%include "../boot_sector/32bit-switch.asm"
+%include "./boot/print.asm"
+%include "./boot/print_hex.asm"
+%include "./boot/disk.asm"
+%include "./boot/gdt.asm"
+%include "./boot/32bit-print.asm"
+%include "./boot/switch_pm.asm"
 
 [bits 16]
 load_kernel:
