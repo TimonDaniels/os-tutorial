@@ -1,9 +1,18 @@
+#include "../drivers/ports.h"
 
-/* This will force us to create a kernel entry function instead of jumping to kernel.c:0x00 */
-void dummy_test_entrypoint() {
-}
 
 void main() {
-    char* video_memory = (char*) 0xb8000;
-    *video_memory = 'X';
+    port_byte_out(0x3d4, 14);
+    
+    int position = port_byte_in(0x3d4);
+    position <<= 8;
+
+    port_byte_out(0x3d4, 15);
+    position |= port_byte_in(0x3d5);
+
+    int offset = position * 2;
+
+    unsigned char* vga = (unsigned char*)0xb8000;
+    vga[offset] = 'X';
+    vga[offset + 1] = 0x0f;
 }
